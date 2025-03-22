@@ -2,9 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import Navbar from "./navbar";
 import RetractableChatbox from "./chatbox";
-import Generaltab from "./generaltab";
+
 import Footer from "./footer";
 import "/index.css";
+import ExperimentTab from "./ExperimentTab";
 
 const App = () => {
   return (
@@ -13,7 +14,7 @@ const App = () => {
       <main className="flex-1 flex">
         <RetractableChatbox />
         <div className="flex-1">
-          <Generaltab />
+          <ExperimentTab />
         </div>
       </main>
       <Footer />
