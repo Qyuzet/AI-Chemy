@@ -4,16 +4,18 @@ import Navbar from "./navbar";
 import RetractableChatbox from "./chatbox";
 import Generaltab from "./generaltab";
 import Footer from "./footer";
-import "/index.css"; // Pastikan path ini benar
+import "/index.css";
 
 const App = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="flex flex-row justify-center items-center">
-          <RetractableChatbox />     
+      <main className="flex-1 flex">
+        <RetractableChatbox />
+        <div className="flex-1">
           <Generaltab />
-      </div>
+        </div>
+      </main>
       <Footer />
     </div>
   );

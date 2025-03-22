@@ -1,23 +1,23 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { backend } from 'declarations/backend';
-import botImg from '/bot.svg';
-import userImg from '/user.svg';
-import '/index.css';
+import React, { useState, useRef, useEffect } from "react";
+// import { backend } from 'declarations/backend';
+import botImg from "/bot.svg";
+import userImg from "/user.svg";
+import "/index.css";
 
 const RetractableChatbox = () => {
   const [chat, setChat] = useState([
     {
       role: { system: null },
-      content: "I'm AI-Chemy assistant welcome to AI-Chemy"
-    }
+      content: "I'm AI-Chemy assistant welcome to AI-Chemy",
+    },
   ]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const chatBoxRef = useRef(null);
 
   const formatDate = (date) => {
-    const h = '0' + date.getHours();
-    const m = '0' + date.getMinutes();
+    const h = "0" + date.getHours();
+    const m = "0" + date.getMinutes();
     return `${h.slice(-2)}:${m.slice(-2)}`;
   };
 
@@ -53,14 +53,14 @@ const RetractableChatbox = () => {
 
     const userMessage = {
       role: { user: null },
-      content: inputValue
+      content: inputValue,
     };
     const thinkingMessage = {
       role: { system: null },
-      content: 'Thinking ...'
+      content: "Thinking ...",
     };
     setChat((prevChat) => [...prevChat, userMessage, thinkingMessage]);
-    setInputValue('');
+    setInputValue("");
     setIsLoading(true);
     const messagesToSend = chat.slice(1).concat(userMessage);
     askAgent(messagesToSend);
@@ -73,26 +73,43 @@ const RetractableChatbox = () => {
   }, [chat]);
 
   return (
-    <div className="relative h-full w-80 bg-black shadow-lg z-50 flex flex-col">
+    <div className="h-auto w-80 bg-black shadow-lg flex flex-col">
       <div className="h-full overflow-y-auto p-4 flex-1">
-        <div className="flex-1 overflow-y-auto rounded-t-lg bg-black p-4" ref={chatBoxRef}>
+        <div
+          className="flex-1 overflow-y-auto rounded-t-lg bg-black p-4"
+          ref={chatBoxRef}
+        >
           {chat.map((message, index) => {
-            const isUser = 'user' in message.role;
+            const isUser = "user" in message.role;
             const img = isUser ? userImg : botImg;
-            const name = isUser ? 'User' : 'AI-Chemy';
+            const name = isUser ? "User" : "AI-Chemy";
             const text = message.content;
 
             return (
-              <div key={index} className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
+              <div
+                key={index}
+                className={`flex ${
+                  isUser ? "justify-end" : "justify-start"
+                } mb-4`}
+              >
                 {!isUser && (
                   <div
                     className="mr-2 h-10 w-10 rounded-full"
-                    style={{ backgroundImage: `url(${img})`, backgroundSize: 'cover' }}
+                    style={{
+                      backgroundImage: `url(${img})`,
+                      backgroundSize: "cover",
+                    }}
                   ></div>
                 )}
-                <div className={`max-w-[70%] rounded-lg p-3 ${isUser ? 'bg-white text-black' : 'bg-white shadow'}`}>
+                <div
+                  className={`max-w-[70%] rounded-lg p-3 ${
+                    isUser ? "bg-white text-black" : "bg-white shadow"
+                  }`}
+                >
                   <div
-                    className={`mb-1 flex items-center justify-between text-sm ${isUser ? 'text-black' : 'text-gray-500'}`}
+                    className={`mb-1 flex items-center justify-between text-sm ${
+                      isUser ? "text-black" : "text-gray-500"
+                    }`}
                   >
                     <div>{name}</div>
                     <div className="mx-2">{formatDate(new Date())}</div>
@@ -102,7 +119,10 @@ const RetractableChatbox = () => {
                 {isUser && (
                   <div
                     className="ml-2 h-10 w-10 rounded-full"
-                    style={{ backgroundImage: `url(${img})`, backgroundSize: 'cover' }}
+                    style={{
+                      backgroundImage: `url(${img})`,
+                      backgroundSize: "cover",
+                    }}
                   ></div>
                 )}
               </div>
@@ -123,7 +143,9 @@ const RetractableChatbox = () => {
           <button
             type="submit"
             className={`p-2 rounded-full transition-all duration-300 flex items-center justify-center bg-white text-black border border-white hover:bg-black hover:text-white ${
-              isLoading || !inputValue.trim() ? 'opacity-50 cursor-not-allowed' : ''
+              isLoading || !inputValue.trim()
+                ? "opacity-50 cursor-not-allowed"
+                : ""
             }`}
             disabled={isLoading || !inputValue.trim()}
           >
@@ -135,4 +157,4 @@ const RetractableChatbox = () => {
   );
 };
 
-export default RetractableChatbox; 
+export default RetractableChatbox;
