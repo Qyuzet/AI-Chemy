@@ -20,6 +20,12 @@ const RetractableChatbox = () => {
       window.lucide.createIcons();
     }
   }, []);
+
+  useEffect(() => {
+   if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [chat]);
     
 
   const formatDate = (date) => {
