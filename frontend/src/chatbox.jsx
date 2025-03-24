@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 // import { backend } from 'declarations/backend';
-import botImg from "/bot.svg";
+import botImg from "/Bot.png";
 import userImg from "/user.svg";
 import "/index.css";
 
@@ -80,7 +80,7 @@ const RetractableChatbox = () => {
   }, [chat]);
 
   return (
-    <div className="h-auto w-80 bg-zinc-900 shadow-lg flex flex-col">
+    <div className="h-auto w-80 bg-zinc-900 shadow-lg flex flex-col border border-white">
       <div className="h-full overflow-y-auto p-4 flex-1">
         <div
           className="flex-1 overflow-y-auto rounded-t-lg p-4"
