@@ -22,12 +22,11 @@ const RetractableChatbox = () => {
   }, []);
 
   useEffect(() => {
-   if (chatBoxRef.current) {
+    if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [chat]);
     
-
   const formatDate = (date) => {
     const h = "0" + date.getHours();
     const m = "0" + date.getMinutes();
@@ -79,69 +78,62 @@ const RetractableChatbox = () => {
     askAgent(messagesToSend);
   };
 
-  useEffect(() => {
-    if (chatBoxRef.current) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-    }
-  }, [chat]);
-
   return (
     <div className="h-auto w-80 bg-zinc-900 shadow-lg flex flex-col border border-white">
-      <div className="h-full overflow-y-auto p-4 flex-1">
-        <div
-          className="flex-1 overflow-y-auto rounded-t-lg p-4"
-          ref={chatBoxRef}
-        >
-          {chat.map((message, index) => {
-            const isUser = "user" in message.role;
-            const img = isUser ? userImg : botImg;
-            const name = isUser ? "User" : "AI-Chemy";
-            const text = message.content;
+      <div 
+        className="flex-1 overflow-y-auto p-4" 
+        style={{ maxHeight: "600px" }} 
+        ref={chatBoxRef}
+      >
+        {chat.map((message, index) => {
+          const isUser = "user" in message.role;
+          const img = isUser ? userImg : botImg;
+          const name = isUser ? "User" : "AI-Chemy";
+          const text = message.content;
 
-            return (
-              <div
-                key={index}
-                className={`flex ${
-                  isUser ? "justify-end" : "justify-start"
-                } mb-4`}
-              >
-                {!isUser && (
-                  <div
-                    className="mr-2 h-10 w-10 rounded-full"
-                    style={{
-                      backgroundImage: `url(${img})`,
-                      backgroundSize: "cover",
-                    }}
-                  ></div>
-                )}
+          return (
+            <div
+              key={index}
+              className={`flex ${
+                isUser ? "justify-end" : "justify-start"
+              } mb-4`}
+            >
+              {!isUser && (
                 <div
-                  className={`max-w-[70%] rounded-lg p-3 ${
-                    isUser ? "bg-white text-black" : "bg-white shadow"
+                  className="mr-2 h-10 w-10 rounded-full"
+                  style={{
+                    backgroundImage: `url(${img})`,
+                    backgroundSize: "cover",
+                  }}
+                ></div>
+              )}
+              <div
+                className={`max-w-[70%] rounded-lg p-3 ${
+                  isUser ? "bg-white text-black" : "bg-white shadow"
+                }`}
+              >
+                <div
+                  className={`mb-1 flex items-center justify-between text-sm ${
+                    isUser ? "text-black" : "text-gray-500"
                   }`}
                 >
-                  <div
-                    className={`mb-1 flex items-center justify-between text-sm ${
-                      isUser ? "text-black" : "text-gray-500"
-                    }`}
-                  >
-                    <div>{name}</div>
-                    <div className="mx-2">{formatDate(new Date())}</div>
-                  </div>
-                  <div>{text}</div>
+                  <div>{name}</div>
+                  <div className="mx-2">{formatDate(new Date())}</div>
                 </div>
-                {isUser && (
-                  <div
-                    className="ml-2 h-10 w-10 rounded-full"
-                    style={{
-                      backgroundImage: `url(${img})`,
-                      backgroundSize: "cover",
-                    }}
-                  ></div>
-                )}
+                <div>{text}</div>
               </div>
-            );
-          })}
-        </div>
+              {isUser && (
+                <div
+                  className="ml-2 h-10 w-10 rounded-full"
+                  style={{
+                    backgroundImage: `url(${img})`,
+                    backgroundSize: "cover",
+                  }}
+                ></div>
+              )}
+            </div>
+          );
+        })}
       </div>
       <form className="border-t border-white p-2" onSubmit={handleSubmit}>
         <div className="flex space-x-2">
