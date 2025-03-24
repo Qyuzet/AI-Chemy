@@ -1,79 +1,146 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom/client";
-import Navbar from "./navbar";
-import RetractableChatbox from "./chatbox";
-import GeneralTab from "./generaltab";
-import AlternativeTab from "./alternativtab";
-import ComposerTab from "./composertab";
-import Footer from "./footer";
-import "/index.css";
+import React, { useState, useEffect } from "react";
 
-const App = () => {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const Navbar = () => {
+      const [isOpen, setIsOpen] = useState(false);
+      const [isAuthenticated, setIsAuthenticated] = useState(false);
+      const [authClient, setAuthClient] = useState(null);
 
-  return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      
-      {/* Hamburger Menu Button */}
-      <button
-        className="absolute top-4 left-4 z-50 p-2 bg-gray-800 text-white rounded-md lg:hidden"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-      >
-        <i className="lucide lucide-menu" style={{ fontSize: "24px" }}></i>
-      </button>
-      
-      <main className="flex-1 flex bg-black relative">
-        {/* Chatbox - Hidden on small screens, toggled with button */}
-        <div
-          className={`fixed top-0 left-0 h-full w-64 bg-gray-900 p-4 transition-transform ${
-            isChatOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:relative lg:translate-x-0`}
-        >
-          <RetractableChatbox />
-          <button
-            className="absolute top-2 right-2 text-white lg:hidden"
-            onClick={() => setIsChatOpen(false)}
-          >
-            ✖
-          </button>
-        </div>
-        
-        <div className="flex-1 p-4">
-          <section className="flex flex-col gap-4 h-full">
-            {/* Tabs */}
-            <div className={`grid gap-4 ${isMenuOpen ? "grid-cols-1" : "grid-cols-2"}`}>
-              <div className="border-2 border-white rounded-lg p-4 bg-black shadow-md">
-                <AlternativeTab />
+      useEffect(() => {
+        const checkAuth = async () => {
+          try {
+            const client = await window.AuthClient.create();
+            setAuthClient(client);
+            const authenticated = await client.isAuthenticated();
+            setIsAuthenticated(authenticated);
+          } catch (error) {
+            console.error("Authentication error:", error);
+          }
+        };
+        checkAuth();
+      }, []);
+
+      const handleConnect = async () => {
+        if (!authClient) return;
+
+        await authClient.login({
+          identityProvider: "https://identity.ic0.app",
+          onSuccess: () => {
+            setIsAuthenticated(true);
+          },
+        });
+      };
+
+      const handleDisconnect = async () => {
+        if (authClient) {
+          await authClient.logout();
+          setIsAuthenticated(false);
+        }
+      };
+
+      return (
+        <nav className="bg-gray-900 text-gray-100 shadow-xl border-b border-purple-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16 items-center">
+              {/* Logo and desktop menu */}
+              <div className="flex items-center space-x-8">
+                <a href="#" className="flex items-center">
+                  <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
+                    AI-Chemy
+                  </span>
+                </a>
+                
+                <div className="hidden md:flex space-x-4">
+                  <a
+                    href="#"
+                    className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                  >
+                    Choose Material
+                  </a>
+                  <a
+                    href="#"
+                    className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors"
+                  >
+                    Confirm Material
+                  </a>
+                </div>
               </div>
-              <div className="border-2 border-white rounded-lg p-4 bg-black shadow-md">
-                <GeneralTab />
+
+              {/* Wallet connection - Desktop */}
+              <div className="hidden md:block">
+                {isAuthenticated ? (
+                  <button
+                    onClick={handleDisconnect}
+                    className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-md hover:from-purple-700 hover:to-blue-700 transition-all"
+                  >
+                    Disconnect
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleConnect}
+                    className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-md hover:from-purple-700 hover:to-blue-700 transition-all"
+                  >
+                    Connect ICP
+                  </button>
+                )}
+              </div>
+
+              {/* Mobile menu button */}
+              <div className="md:hidden flex items-center">
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="p-2 rounded-md hover:bg-gray-800 focus:outline-none"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    {isOpen ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    )}
+                  </svg>
+                </button>
               </div>
             </div>
-            <div className="border-2 border-white rounded-lg p-4 bg-black shadow-md flex-1">
-              <ComposerTab />
+          </div>
+
+          {/* Mobile menu */}
+          <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              <a
+                href="#"
+                className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800"
+              >
+                Choose Material
+              </a>
+              <a
+                href="#"
+                className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800"
+              >
+                Confirm Material
+              </a>
+              {isAuthenticated ? (
+                <button
+                  onClick={handleDisconnect}
+                  className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600"
+                >
+                  Disconnect
+                </button>
+              ) : (
+                <button
+                  onClick={handleConnect}
+                  className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600"
+                >
+                  Connect ICP
+                </button>
+              )}
             </div>
-          </section>
-        </div>
-      </main>
-      <Footer />
-      
-      {/* Chat Toggle Button */}
-      <button
-        className="fixed bottom-4 left-4 p-3 bg-blue-600 text-white rounded-full lg:hidden"
-        onClick={() => setIsChatOpen(!isChatOpen)}
-      >
-        💬
-      </button>
-    </div>
-  );
+          </div>
+        </nav>
+      );
 };
 
-export default App;
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+export default Navbar;

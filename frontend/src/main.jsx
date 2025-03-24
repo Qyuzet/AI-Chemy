@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import Navbar from "./navbar";
 import RetractableChatbox from "./chatbox";
 import GeneralTab from "./generaltab";
-import AlternativeTab from "./alternativtab";
+import AlternativeTab from "./alternativetab";
 import ComposerTab from "./composertab";
 import Footer from "./footer";
 import "/index.css";
