@@ -9,6 +9,27 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+    tailwind.config = {
+    theme: {
+      extend: {},
+    },
+    plugins: [
+      function ({ addComponents }) {
+        addComponents({
+          ".card": {
+            padding: "1rem",
+            borderRadius: "0.5rem",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "white",
+            border: "1px solid #e5e7eb",
+          },
+        });
+      },
+    ],
+  };
+</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
     <script type="module" src="src/main.jsx"></script>
   </body>

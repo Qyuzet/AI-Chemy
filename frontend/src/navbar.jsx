@@ -2,11 +2,15 @@ import React, { useState } from "react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  if (!isAuthenticated) {
+    
+  }
 
   return (
-    <nav className="bg-black shadow-md w-full z-10">
+    <nav className="bg-black shadow-md w-full z-10 border-b border-white dark:bg-black dark:border-white">
       <div className="max-w-screen-xl mx-auto flex items-center justify-between p-4 md:px-6">
-        {/* Title in center */}
         <div className="flex-1 flex justify-center absolute inset-x-0 mx-auto md:relative">
           <span className="text-2xl font-semibold bg-gradient-to-r from-blue-600 via-indigo-500 to-indigo-300 text-transparent bg-clip-text tracking-wide">
             AI-Chemy

@@ -15,6 +15,13 @@ const RetractableChatbox = () => {
   const [isLoading, setIsLoading] = useState(false);
   const chatBoxRef = useRef(null);
 
+  useEffect(() => {
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }, []);
+    
+
   const formatDate = (date) => {
     const h = "0" + date.getHours();
     const m = "0" + date.getMinutes();
@@ -73,10 +80,10 @@ const RetractableChatbox = () => {
   }, [chat]);
 
   return (
-    <div className="h-auto w-80 bg-black shadow-lg flex flex-col">
+    <div className="h-auto w-80 bg-zinc-900 shadow-lg flex flex-col">
       <div className="h-full overflow-y-auto p-4 flex-1">
         <div
-          className="flex-1 overflow-y-auto rounded-t-lg bg-black p-4"
+          className="flex-1 overflow-y-auto rounded-t-lg p-4"
           ref={chatBoxRef}
         >
           {chat.map((message, index) => {
@@ -130,7 +137,7 @@ const RetractableChatbox = () => {
           })}
         </div>
       </div>
-      <form className="border-t border-black p-2" onSubmit={handleSubmit}>
+      <form className="border-t border-white p-2" onSubmit={handleSubmit}>
         <div className="flex space-x-2">
           <input
             type="text"
@@ -142,14 +149,14 @@ const RetractableChatbox = () => {
           />
           <button
             type="submit"
-            className={`p-2 rounded-full transition-all duration-300 flex items-center justify-center bg-white text-black border border-white hover:bg-black hover:text-white ${
+            className={`p-3 rounded-full transition-all duration-300 flex items-center justify-center ${
               isLoading || !inputValue.trim()
-                ? "opacity-50 cursor-not-allowed"
-                : ""
+                ? "bg-gray-800 text-white border-white opacity-50 cursor-not-allowed"
+                : "bg-white text-black border-white hover:bg-black hover:text-white hover:border-white px-4 py-2"
             }`}
             disabled={isLoading || !inputValue.trim()}
           >
-            ➤
+            <i data-lucide="send"></i>
           </button>
         </div>
       </form>
