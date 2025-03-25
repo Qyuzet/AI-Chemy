@@ -26,7 +26,7 @@ const RetractableChatbox = () => {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [chat]);
-    
+
   const formatDate = (date) => {
     const h = "0" + date.getHours();
     const m = "0" + date.getMinutes();
@@ -79,10 +79,10 @@ const RetractableChatbox = () => {
   };
 
   return (
-    <div className="h-auto w-80 bg-zinc-900 shadow-lg flex flex-col border border-white">
-      <div 
-        className="flex-1 overflow-y-auto p-4" 
-        style={{ maxHeight: "600px" }} 
+    <div className="h-[calc(100vh-4rem)] md:h-full w-full md:w-full bg-zinc-900 shadow-lg flex flex-col border border-white">
+      <div
+        className="flex-1 overflow-y-auto p-4"
+        style={{ maxHeight: "calc(100vh - 8rem)" }}
         ref={chatBoxRef}
       >
         {chat.map((message, index) => {
@@ -100,7 +100,7 @@ const RetractableChatbox = () => {
             >
               {!isUser && (
                 <div
-                  className="mr-2 h-10 w-10 rounded-full"
+                  className="mr-2 h-8 w-8 md:h-10 md:w-10 rounded-full"
                   style={{
                     backgroundImage: `url(${img})`,
                     backgroundSize: "cover",
@@ -108,23 +108,23 @@ const RetractableChatbox = () => {
                 ></div>
               )}
               <div
-                className={`max-w-[70%] rounded-lg p-3 ${
+                className={`max-w-[80%] md:max-w-[70%] rounded-lg p-2 md:p-3 ${
                   isUser ? "bg-white text-black" : "bg-white shadow"
                 }`}
               >
                 <div
-                  className={`mb-1 flex items-center justify-between text-sm ${
+                  className={`mb-1 flex items-center justify-between text-xs md:text-sm ${
                     isUser ? "text-black" : "text-gray-500"
                   }`}
                 >
                   <div>{name}</div>
                   <div className="mx-2">{formatDate(new Date())}</div>
                 </div>
-                <div>{text}</div>
+                <div className="text-sm md:text-base">{text}</div>
               </div>
               {isUser && (
                 <div
-                  className="ml-2 h-10 w-10 rounded-full"
+                  className="ml-2 h-8 w-8 md:h-10 md:w-10 rounded-full"
                   style={{
                     backgroundImage: `url(${img})`,
                     backgroundSize: "cover",
@@ -139,7 +139,7 @@ const RetractableChatbox = () => {
         <div className="flex space-x-2">
           <input
             type="text"
-            className="flex-1 rounded-full bg-white text-black border border-transparent transition-all duration-300 ease-out transform hover:scale-105 hover:bg-black hover:text-white hover:border-white px-4 py-2"
+            className="flex-1 rounded-full bg-white text-black border border-transparent transition-all duration-300 ease-out transform hover:scale-105 hover:bg-black hover:text-white hover:border-white px-3 md:px-4 py-1 md:py-2 text-sm md:text-base"
             placeholder="Ask anything ..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -147,14 +147,14 @@ const RetractableChatbox = () => {
           />
           <button
             type="submit"
-            className={`p-3 rounded-full transition-all duration-300 flex items-center justify-center ${
+            className={`p-2 md:p-3 rounded-full transition-all duration-300 flex items-center justify-center ${
               isLoading || !inputValue.trim()
                 ? "bg-gray-800 text-white border-white opacity-50 cursor-not-allowed"
-                : "bg-white text-black border-white hover:bg-black hover:text-white hover:border-white px-4 py-2"
+                : "bg-white text-black border-white hover:bg-black hover:text-white hover:border-white"
             }`}
             disabled={isLoading || !inputValue.trim()}
           >
-            <i data-lucide="send"></i>
+            <i data-lucide="send" className="w-4 h-4 md:w-5 md:h-5"></i>
           </button>
         </div>
       </form>
