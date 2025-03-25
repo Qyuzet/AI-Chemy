@@ -1,163 +1,71 @@
 import React, { useState, useRef, useEffect } from "react";
-// import { backend } from 'declarations/backend';
-import botImg from "/Bot.png";
-import userImg from "/user.svg";
+import { useChemy } from "./contexts/ChemyContext";
 import "/index.css";
 
 const RetractableChatbox = () => {
-  const [chat, setChat] = useState([
-    {
-      role: { system: null },
-      content: "I'm AI-Chemy assistant welcome to AI-Chemy",
-    },
-  ]);
-  const [inputValue, setInputValue] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [materialQuery, setMaterialQuery] = useState("");
   const chatBoxRef = useRef(null);
 
-  useEffect(() => {
-    if (window.lucide) {
-      window.lucide.createIcons();
-    }
-  }, []);
+  const { chatHistory, isLoading, chemyLogic } = useChemy();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!materialQuery.trim() || isLoading) return;
+
+    await chemyLogic(
+      `What are the possible chemical combinations to create ${materialQuery}?`
+    );
+    setMaterialQuery("");
+  };
 
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
-  }, [chat]);
-
-  const formatDate = (date) => {
-    const h = "0" + date.getHours();
-    const m = "0" + date.getMinutes();
-    return `${h.slice(-2)}:${m.slice(-2)}`;
-  };
-
-  const askAgent = async (messages) => {
-    try {
-      const response = await backend.chat(messages);
-      setChat((prevChat) => {
-        const newChat = [...prevChat];
-        newChat.pop();
-        newChat.push({ role: { system: null }, content: response });
-        return newChat;
-      });
-    } catch (e) {
-      console.log(e);
-      const eStr = String(e);
-      const match = eStr.match(/(SysTransient|CanisterReject), \+"([^\"]+)/);
-      if (match) {
-        alert(match[2]);
-      }
-      setChat((prevChat) => {
-        const newChat = [...prevChat];
-        newChat.pop();
-        return newChat;
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!inputValue.trim() || isLoading) return;
-
-    const userMessage = {
-      role: { user: null },
-      content: inputValue,
-    };
-    const thinkingMessage = {
-      role: { system: null },
-      content: "Thinking ...",
-    };
-    setChat((prevChat) => [...prevChat, userMessage, thinkingMessage]);
-    setInputValue("");
-    setIsLoading(true);
-    const messagesToSend = chat.slice(1).concat(userMessage);
-    askAgent(messagesToSend);
-  };
+  }, [chatHistory]);
 
   return (
-    <div className="h-[calc(100vh-4rem)] md:h-full w-full md:w-full bg-zinc-900 shadow-lg flex flex-col border border-white">
-      <div
-        className="flex-1 overflow-y-auto p-4"
-        style={{ maxHeight: "calc(100vh - 8rem)" }}
-        ref={chatBoxRef}
-      >
-        {chat.map((message, index) => {
-          const isUser = "user" in message.role;
-          const img = isUser ? userImg : botImg;
-          const name = isUser ? "User" : "AI-Chemy";
-          const text = message.content;
-
-          return (
-            <div
-              key={index}
-              className={`flex ${
-                isUser ? "justify-end" : "justify-start"
-              } mb-4`}
-            >
-              {!isUser && (
-                <div
-                  className="mr-2 h-8 w-8 md:h-10 md:w-10 rounded-full"
-                  style={{
-                    backgroundImage: `url(${img})`,
-                    backgroundSize: "cover",
-                  }}
-                ></div>
-              )}
-              <div
-                className={`max-w-[80%] md:max-w-[70%] rounded-lg p-2 md:p-3 ${
-                  isUser ? "bg-white text-black" : "bg-white shadow"
-                }`}
-              >
-                <div
-                  className={`mb-1 flex items-center justify-between text-xs md:text-sm ${
-                    isUser ? "text-black" : "text-gray-500"
-                  }`}
-                >
-                  <div>{name}</div>
-                  <div className="mx-2">{formatDate(new Date())}</div>
-                </div>
-                <div className="text-sm md:text-base">{text}</div>
-              </div>
-              {isUser && (
-                <div
-                  className="ml-2 h-8 w-8 md:h-10 md:w-10 rounded-full"
-                  style={{
-                    backgroundImage: `url(${img})`,
-                    backgroundSize: "cover",
-                  }}
-                ></div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-      <form className="border-t border-white p-2" onSubmit={handleSubmit}>
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            className="flex-1 rounded-full bg-white text-black border border-transparent transition-all duration-300 ease-out transform hover:scale-105 hover:bg-black hover:text-white hover:border-white px-3 md:px-4 py-1 md:py-2 text-sm md:text-base"
-            placeholder="Ask anything ..."
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            disabled={isLoading}
-          />
+    <div className="flex flex-col h-[calc(100vh-8rem)] bg-zinc-900 shadow-lg border border-white">
+      <div className="p-4 border-b border-white">
+        <h2 className="text-xl font-bold text-white mb-2">
+          Chemical Reaction Explorer
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2 text-white">
+              What material would you like to create?
+            </label>
+            <input
+              type="text"
+              value={materialQuery}
+              onChange={(e) => setMaterialQuery(e.target.value)}
+              placeholder="e.g., a strong adhesive, a water-resistant polymer"
+              className="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:border-white focus:outline-none"
+              disabled={isLoading}
+            />
+          </div>
           <button
             type="submit"
-            className={`p-2 md:p-3 rounded-full transition-all duration-300 flex items-center justify-center ${
-              isLoading || !inputValue.trim()
-                ? "bg-gray-800 text-white border-white opacity-50 cursor-not-allowed"
-                : "bg-white text-black border-white hover:bg-black hover:text-white hover:border-white"
-            }`}
-            disabled={isLoading || !inputValue.trim()}
+            disabled={isLoading || !materialQuery.trim()}
+            className={`w-full px-4 py-2 rounded ${
+              isLoading || !materialQuery.trim()
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            } transition-colors text-white`}
           >
-            <i data-lucide="send" className="w-4 h-4 md:w-5 md:h-5"></i>
+            {isLoading ? "Analyzing..." : "Explore Chemical Reactions"}
           </button>
+        </form>
+      </div>
+      <div ref={chatBoxRef} className="flex-1 p-4 overflow-y-auto">
+        <div className="h-full bg-gray-800 rounded-lg p-4">
+          <pre className="whitespace-pre-wrap text-white text-sm font-mono">
+            {chatHistory.length > 0
+              ? chatHistory[chatHistory.length - 1].content
+              : "Start by asking about a material you'd like to create..."}
+          </pre>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

@@ -1,19 +1,25 @@
 import React from "react";
+import { useChemy } from "./contexts/ChemyContext";
 
 const GeneralTab = () => {
-    return (
-        <div className="card bg-black text-white w-96 shadow-sm">
-  <div className="card-body">
-    <h2 className="card-title">General Tab</h2>
-    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-  </div>
-  <figure>
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-      alt="Shoes" />
-  </figure>
-</div>
-    );
+  const { selectedPossibility } = useChemy();
+
+  return (
+    <div className="card bg-black text-white w-full shadow-sm">
+      <div className="card-body">
+        <h2 className="card-title">Explanation</h2>
+        {selectedPossibility ? (
+          <div className="p-4 bg-gray-800 rounded">
+            <p className="text-sm">{selectedPossibility.explanation}</p>
+          </div>
+        ) : (
+          <p className="text-gray-400">
+            Select a possibility to see its explanation
+          </p>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default GeneralTab;
