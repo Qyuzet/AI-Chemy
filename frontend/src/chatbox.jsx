@@ -25,7 +25,7 @@ const RetractableChatbox = () => {
   }, [chatHistory]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)] bg-zinc-900 shadow-lg border border-white">
+    <div className="flex flex-col h-[calc(100vh-8rem)] bg-zinc-900 shadow-lg border-2 rounded-xl m-2 md:rounded-none md:m-0">
       <div className="p-4 border-b border-white">
         <h2 className="text-xl font-bold text-white mb-2">
           Chemical Reaction Explorer
