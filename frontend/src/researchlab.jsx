@@ -160,7 +160,7 @@ function ResearchPaperGenerator() {
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           placeholder="Enter research topic"
-          className="w-full p-3 mb-4 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 mb-4 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         />
         
         <div className="flex space-x-4 mb-6">
@@ -170,7 +170,7 @@ function ResearchPaperGenerator() {
             className={`flex-1 p-3 rounded-lg ${
               isLoading 
                 ? 'bg-gray-600 cursor-not-allowed' 
-                : 'bg-green-600 hover:bg-green-700 transition duration-300'
+                : 'bg-black text white hover:bg-white hover:text-black transition duration-300'
             } text-white font-semibold`}
           >
             {isLoading ? 'Generating...' : 'Generate Research Paper'}
@@ -179,7 +179,7 @@ function ResearchPaperGenerator() {
           {researchPaper && (
             <button 
               onClick={downloadPDF}
-              className="flex-1 p-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold transition duration-300"
+              className="flex-1 p-3 bg-black text white hover:bg-white hover:text-black font-semibold transition duration-300"
             >
               Download PDF
             </button>
