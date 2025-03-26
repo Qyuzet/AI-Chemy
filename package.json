@@ -8,5 +8,9 @@
   "type": "module",
   "workspaces": [
     "frontend"
-  ]
+  ],
+  "dependencies": {
+    "openai": "^4.89.0",
+    "react-router-dom": "^7.4.0"
+  }
 }

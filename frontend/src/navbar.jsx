@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
     const Navbar = () => {
       const [isOpen, setIsOpen] = useState(false);
@@ -49,18 +50,18 @@ import React, { useState, useEffect } from "react";
                 </a>
                 
                 <div className="hidden md:flex space-x-4">
-                  <a
-                    href="#"
+                  <Link
+                    to="/researchlab"
                     className="px-3 py-2 rounded-md text-sm font-medium hover:bg-zinc-800 transition-colors"
                   >
-                    Choose Material
-                  </a>
-                  <a
+                      Make Research Paper
+                  </Link>
+                  <Link
                     href="#"
                     className="px-3 py-2 rounded-md text-sm font-medium hover:bg-zinc-800 transition-colors"
                   >
                     Confirm Material
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="hidden md:block">
@@ -103,18 +104,18 @@ import React, { useState, useEffect } from "react";
           </div>
           <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <a
-                href="#"
+              <Link
+                to="/researchlab"
                 className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800"
               >
-                Choose Material
-              </a>
-              <a
+                Make Research Paper
+              </Link>
+              <Link
                 href="#"
                 className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800"
               >
                 Confirm Material
-              </a>
+              </Link>
               {isAuthenticated ? (
                 <button
                   onClick={handleDisconnect}

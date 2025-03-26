@@ -31,7 +31,7 @@ Do not add any extra text like introductions, conclusions, or sourcing suggestio
 
 // Initialize OpenAI client
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "your-api-key", // Should be in .env
+  apiKey: process.env.OPENAI_API_KEY || "your_api_key", //should be in .env
   dangerouslyAllowBrowser: true,
 });
 
