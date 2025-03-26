@@ -10,6 +10,7 @@
     "frontend"
   ],
   "dependencies": {
+    "jspdf": "^3.0.1",
     "openai": "^4.89.0",
     "react-router-dom": "^7.4.0"
   }

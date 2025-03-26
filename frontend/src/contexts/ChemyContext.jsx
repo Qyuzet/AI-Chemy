@@ -31,7 +31,7 @@ Do not add any extra text like introductions, conclusions, or sourcing suggestio
 
 // Initialize OpenAI client
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "your_api_key", //should be in .env
+  apiKey: process.env.OPENAI_API_KEY, // Should be in .env
   dangerouslyAllowBrowser: true,
 });
 
@@ -59,7 +59,7 @@ export const ChemyProvider = ({ children }) => {
 
       // Get AI response with system prompt
       const completion = await client.chat.completions.create({
-        model: "gpt-4",
+        model: "gpt-3.5-turbo",
         messages: [
           {
             role: "system",
