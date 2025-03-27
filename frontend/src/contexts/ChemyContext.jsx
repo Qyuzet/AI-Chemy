@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import OpenAI from "openai";
+// Import for ICP backend (uncomment when ready)
+// import { backend } from "../declarations/backend";
 
 const ChemyContext = createContext();
 
@@ -29,9 +31,9 @@ Explanation:
 
 Do not add any extra text like introductions, conclusions, or sourcing suggestions. Follow this exact format in every response.`;
 
-// Initialize OpenAI client
+// Current OpenAI implementation
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // Should be in .env
+  apiKey: process.env.OPENAI_API_KEY,
   dangerouslyAllowBrowser: true,
 });
 
@@ -43,6 +45,7 @@ export const ChemyProvider = ({ children }) => {
   const [selectedPossibility, setSelectedPossibility] = useState(null);
   const [possibilities, setPossibilities] = useState([]);
 
+  // Current OpenAI implementation
   const chemyLogic = useCallback(async (userInput) => {
     setIsLoading(true);
     setError(null);
@@ -54,10 +57,8 @@ export const ChemyProvider = ({ children }) => {
     };
 
     try {
-      // Add user message to history
       setChatHistory((prev) => [...prev, userMessage]);
 
-      // Get AI response with system prompt
       const completion = await client.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
@@ -67,8 +68,8 @@ export const ChemyProvider = ({ children }) => {
           },
           userMessage,
         ],
-        temperature: 0.7, // Slightly creative but still focused
-        max_tokens: 1000, // Allows for detailed chemical reactions
+        temperature: 0.7,
+        max_tokens: 1000,
       });
 
       const aiResponse = {
@@ -77,7 +78,7 @@ export const ChemyProvider = ({ children }) => {
         timestamp: new Date().toISOString(),
       };
 
-      // Parse the response to extract possibilities
+      // Parse possibilities...
       const parsedPossibilities = aiResponse.content
         .split("\n\n")
         .filter((section) => section.startsWith("Possibility"))
@@ -123,6 +124,85 @@ export const ChemyProvider = ({ children }) => {
     }
   }, []);
 
+  /* 
+  // LLAMA Implementation (uncomment and use this when ready)
+  const chemyLogicLlama = useCallback(async (userInput) => {
+    setIsLoading(true);
+    setError(null);
+
+    const userMessage = {
+      role: "user",
+      content: userInput,
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      setChatHistory((prev) => [...prev, userMessage]);
+
+      // Call ICP backend canister with Llama
+      const messages = [
+        {
+          role: "system",
+          content: CHEMISTRY_SYSTEM_PROMPT,
+        },
+        userMessage,
+      ];
+
+      const response = await backend.chat(messages);
+
+      const aiResponse = {
+        role: "assistant",
+        content: response,
+        timestamp: new Date().toISOString(),
+      };
+
+      // Parse possibilities (same parsing logic)
+      const parsedPossibilities = aiResponse.content
+        .split("\n\n")
+        .filter((section) => section.startsWith("Possibility"))
+        .map((possibility) => {
+          const [title, ...rest] = possibility.split("\n");
+          const reactionIndex = rest.findIndex((line) =>
+            line.startsWith("Reaction:")
+          );
+          const explanationIndex = rest.findIndex((line) =>
+            line.startsWith("Explanation:")
+          );
+
+          return {
+            title: title.replace("Possibility ", ""),
+            reaction: rest
+              .slice(reactionIndex + 1, explanationIndex)
+              .join("\n")
+              .trim(),
+            explanation: rest
+              .slice(explanationIndex + 1)
+              .join("\n")
+              .trim(),
+          };
+        });
+
+      setPossibilities(parsedPossibilities);
+      setLastResponse(aiResponse);
+      setChatHistory((prev) => [...prev, aiResponse]);
+
+      return aiResponse;
+    } catch (error) {
+      const errorMessage = {
+        role: "system",
+        content: "Sorry, there was an error processing your chemistry request.",
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      };
+
+      setError(errorMessage);
+      return errorMessage;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+  */
+
   const clearHistory = useCallback(() => {
     setChatHistory([]);
     setLastResponse(null);
@@ -134,7 +214,7 @@ export const ChemyProvider = ({ children }) => {
     isLoading,
     lastResponse,
     error,
-    chemyLogic,
+    chemyLogic, // When ready, replace this with chemyLogicLlama
     clearHistory,
     possibilities,
     selectedPossibility,
@@ -153,3 +233,5 @@ export const useChemy = () => {
   }
   return context;
 };
+
+export default ChemyContext;

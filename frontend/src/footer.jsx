@@ -2,11 +2,27 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="shadow-sm bg-black shadow-md w-full z-10 border-t border-white dark:bg-black dark:border-white mt-auto">
-      <div className="w-full max-w-screen-xl mx-auto p-2">
-        <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
-          © 2025 AI-Chemy™. All Rights Reserved.
-        </span>
+    <footer className="bg-gradient-to-r from-black via-zinc-900 to-black border-t border-zinc-800 shadow-2xl">
+      <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-zinc-500">
+            © 2025 AI-Chemy™. All Rights Reserved.
+          </span>
+          <div className="flex items-center space-x-4">
+            <a
+              href="#"
+              className="text-zinc-500 hover:text-purple-400 transition-colors duration-300"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="#"
+              className="text-zinc-500 hover:text-purple-400 transition-colors duration-300"
+            >
+              Terms of Service
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   );

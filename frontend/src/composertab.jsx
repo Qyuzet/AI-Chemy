@@ -5,17 +5,21 @@ const ComposerTab = () => {
   const { selectedPossibility } = useChemy();
 
   return (
-    <div className="card bg-black text-white w-full shadow-sm">
-      <div className="card-body">
-        <h2 className="card-title">Chemical Reaction</h2>
-        {selectedPossibility && (
-          <div className="p-4 bg-gray-800 rounded overflow-auto max-h-96">
-            <pre className="whitespace-pre-wrap font-mono text-sm">
-              {selectedPossibility.reaction}
-            </pre>
-          </div>
-        )}
-      </div>
+    <div className="p-6">
+      <h2 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent mb-4">
+        Chemical Reaction
+      </h2>
+      {selectedPossibility ? (
+        <div className="p-6 bg-black/30 rounded-lg overflow-auto max-h-96 border border-zinc-800">
+          <pre className="whitespace-pre-wrap font-mono text-sm text-zinc-300">
+            {selectedPossibility.reaction}
+          </pre>
+        </div>
+      ) : (
+        <div className="p-6 bg-black/30 rounded-lg border border-zinc-800 text-zinc-500 text-center">
+          Select a reaction to view details
+        </div>
+      )}
     </div>
   );
 };
