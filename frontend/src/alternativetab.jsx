@@ -5,41 +5,38 @@ const AlternativeTab = () => {
   const { possibilities, setSelectedPossibility } = useChemy();
 
   const copy = (text) => {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-    Swal.fire({
-      icon: 'success',
-      title: 'Copied',
-      text: `"${text}" has been copied to clipboard and you can also see in the composer and general tab.`,
-      showConfirmButton: false,
-      timer: 1500
-    });
+    navigator.clipboard.writeText(text);
   };
 
   return (
-    <div className="card bg-black text-white w-full shadow-sm h-[400px] overflow-hidden">
-      <div className="card-body h-full flex flex-col">
-        <h2 className="card-title">Possible Reactions</h2>
-        <div className="flex-1 overflow-y-auto">
-          <div className="flex flex-col gap-2">
-            {possibilities.map((possibility, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setSelectedPossibility(possibility);
-                  copy(possibility.title);
-                }}
-                className="px-4 py-2 text-left rounded bg-gray-800 hover:bg-gray-700 transition-colors relative"
-              >
-                {possibility.title}
-              </button>
-            ))}
-          </div>
-        </div>
+    <div className="p-6">
+      <h2 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent mb-4">
+        Possible Reactions
+      </h2>
+      <div className="h-[400px] overflow-y-auto pr-2 space-y-3">
+        {possibilities.map((possibility, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setSelectedPossibility(possibility);
+              copy(possibility.title);
+            }}
+            className="w-full p-4 text-left rounded-lg bg-gradient-to-r from-zinc-900 to-black border border-zinc-800 hover:border-purple-500/50 transition-all duration-300 group relative"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-purple-400 font-semibold">
+                Possibility {index + 1}
+              </span>
+              <span className="text-xs text-zinc-500 group-hover:text-purple-400 transition-colors">
+                Click to copy
+              </span>
+            </div>
+            <p className="mt-2 text-zinc-300 font-medium">
+              {possibility.title}
+            </p>
+            <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+          </button>
+        ))}
       </div>
     </div>
   );
