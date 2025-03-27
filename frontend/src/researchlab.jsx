@@ -4,48 +4,76 @@ import { jsPDF } from "jspdf";
 
 const ResearchContext = createContext();
 
-const RESEARCH_SYSTEM_PROMPT = `You are a distinguished academic researcher with multiple publications in top-tier journals. Generate a comprehensive research paper with the following strict structure:
+const RESEARCH_SYSTEM_PROMPT = `You are a distinguished academic researcher with expertise in multidisciplinary research and extensive publication experience in high-impact journals (Nature, Science, Cell). Generate a comprehensive research paper following academic standards and this precise structure:
 
-1. Title: Create a precise, descriptive title reflecting the research focus.
+1. Title: [Create a precise, SEO-optimized title with keywords]
 
-2. Abstract (150-200 words):
-- Clearly state research problem
-- Briefly describe methodology
-- Summarize key findings
-- Highlight significance of research
+2. Abstract (200-250 words):
+- Background & Context
+- Research Objective
+- Methodology Overview
+- Key Findings
+- Implications & Impact
+- Keywords: [5 relevant keywords]
 
-3. Introduction (500-700 words):
-- Background of the research area
-- Research gaps and motivation
-- Clear research questions/hypotheses
-- Significance of the study
+3. Introduction (800-1000 words):
+- Current State of the Field
+- Knowledge Gaps
+- Research Questions/Hypotheses
+- Theoretical Framework
+- Study Objectives
+- Innovation & Contribution
 
-4. Methodology (600-800 words):
-- Detailed research design
-- Data collection methods
-- Sampling strategy
-- Analytical techniques
-- Ethical considerations
+4. Methodology (800-1000 words):
+- Research Design
+- Data Collection Methods
+- Sampling Strategy & Size Calculation
+- Variables & Measurements
+- Quality Control Measures
+- Statistical Analysis Plan
+- Ethical Considerations & Approvals
 
-5. Results (700-900 words):
-- Comprehensive data presentation
-- Statistical analysis
-- Key findings
-- Visual representations (describe graphs/tables)
+5. Results (1000-1200 words):
+- Descriptive Statistics
+- Primary Outcomes
+- Secondary Outcomes
+- Statistical Analyses
+- Confidence Intervals
+- P-values
+- Effect Sizes
+- [Include placeholders for figures/tables with detailed descriptions]
 
-6. Discussion (800-1000 words):
-- Interpretation of results
-- Comparison with existing literature
-- Theoretical and practical implications
-- Limitations of the study
+6. Discussion (1000-1200 words):
+- Summary of Key Findings
+- Comparison with Existing Literature
+- Theoretical Implications
+- Practical Applications
+- Study Strengths
+- Limitations
+- Future Research Directions
 
-7. Conclusion (300-400 words):
-- Summary of key findings
-- Answers to research questions
-- Recommendations for future research
-- Broader impact of the research
+7. Conclusion (400-500 words):
+- Research Summary
+- Key Contributions
+- Broader Impact
+- Policy Implications
+- Future Perspectives
 
-Provide academic, precise language. Use current research conventions. Include appropriate citations and references in APA format. Do not include actual references, but reference styles should be academic.`;
+8. References:
+[Generate 25-30 fictional but properly formatted references in APA style]
+
+Additional Requirements:
+- Use precise scientific language
+- Include statistical significance where applicable
+- Suggest potential figures/tables
+- Highlight practical applications
+- Include funding considerations
+- Suggest potential collaborations
+- Include data availability statement
+- Add conflict of interest statement
+- Include author contributions section
+
+Format all statistical values precisely (e.g., "p < 0.001, CI [0.45, 0.67], d = 0.89").`;
 
 // Note: Replace with your actual OpenAI API key
 const client = new OpenAI({
@@ -72,8 +100,8 @@ export const ResearchProvider = ({ children }) => {
           },
           {
             role: "user",
-            content: `Generate a research paper on the topic: ${researchTopic}`
-          }
+            content: `Generate a research paper on the topic: ${researchTopic}`,
+          },
         ],
         temperature: 0.6,
         max_tokens: 4000,
@@ -98,7 +126,7 @@ export const ResearchProvider = ({ children }) => {
 
     try {
       const doc = new jsPDF();
-      
+
       // Set font and size
       doc.setFontSize(12);
 
@@ -121,7 +149,7 @@ export const ResearchProvider = ({ children }) => {
     downloadPDF,
     researchPaper,
     isLoading,
-    error
+    error,
   };
 
   return (
@@ -141,8 +169,14 @@ export const useResearch = () => {
 
 // Research Paper Generator Component
 function ResearchPaperGenerator() {
-  const [topic, setTopic] = useState('');
-  const { generateResearchPaper, downloadPDF, researchPaper, isLoading, error } = useResearch();
+  const [topic, setTopic] = useState("");
+  const {
+    generateResearchPaper,
+    downloadPDF,
+    researchPaper,
+    isLoading,
+    error,
+  } = useResearch();
 
   const handleGenerate = async () => {
     await generateResearchPaper(topic);
@@ -153,31 +187,31 @@ function ResearchPaperGenerator() {
       <h1 className="text-3xl font-bold text-center mb-8">
         Research Paper Generator
       </h1>
-      
+
       <div className="max-w-2xl mx-auto">
-        <input 
-          type="text" 
+        <input
+          type="text"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           placeholder="Enter research topic"
           className="w-full p-3 mb-4 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         />
-        
+
         <div className="flex space-x-4 mb-6">
-          <button 
-            onClick={handleGenerate} 
+          <button
+            onClick={handleGenerate}
             disabled={isLoading}
             className={`flex-1 p-3 rounded-lg ${
-              isLoading 
-                ? 'bg-gray-600 cursor-not-allowed' 
-                : 'bg-black text white hover:bg-white hover:text-black transition duration-300'
+              isLoading
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-black text white hover:bg-white hover:text-black transition duration-300"
             } text-white font-semibold`}
           >
-            {isLoading ? 'Generating...' : 'Generate Research Paper'}
+            {isLoading ? "Generating..." : "Generate Research Paper"}
           </button>
-          
+
           {researchPaper && (
-            <button 
+            <button
               onClick={downloadPDF}
               className="flex-1 p-3 bg-black text white hover:bg-white hover:text-black font-semibold transition duration-300"
             >
@@ -194,7 +228,9 @@ function ResearchPaperGenerator() {
 
         {researchPaper && (
           <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Research Paper Preview</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              Research Paper Preview
+            </h2>
             <pre className="whitespace-pre-wrap text-sm overflow-auto max-h-[500px]">
               {researchPaper}
             </pre>

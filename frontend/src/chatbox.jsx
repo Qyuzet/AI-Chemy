@@ -24,12 +24,12 @@ const RetractableChatbox = () => {
   }, [chatHistory]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)] bg-zinc-900/50 backdrop-blur-xl rounded-xl border border-zinc-800 shadow-xl">
-      <div className="p-6 border-b border-zinc-800">
-        <h2 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent mb-4">
+    <div className="flex flex-col h-[calc(100vh-8rem)] lg:h-[calc(100vh-10rem)] bg-zinc-900/50 backdrop-blur-xl rounded-xl border border-zinc-800 shadow-xl">
+      <div className="p-4 lg:p-6 border-b border-zinc-800">
+        <h2 className="text-lg lg:text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent mb-4">
           Chemical Reaction Explorer
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <label className="block text-sm font-medium mb-2 text-zinc-300">
               What material would you like to create?
@@ -39,25 +39,22 @@ const RetractableChatbox = () => {
               value={materialQuery}
               onChange={(e) => setMaterialQuery(e.target.value)}
               placeholder="e.g., a strong adhesive, a water-resistant polymer"
-              className="w-full p-3 rounded-lg bg-black/50 text-white border border-zinc-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all duration-300"
-              disabled={isLoading}
+              className="w-full px-4 py-2 bg-black/30 border border-zinc-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-zinc-300 placeholder-zinc-600"
             />
           </div>
           <button
             type="submit"
-            disabled={isLoading || !materialQuery.trim()}
-            className={`w-full px-4 py-3 rounded-lg ${
-              isLoading || !materialQuery.trim()
-                ? "bg-zinc-700 cursor-not-allowed"
-                : "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-            } transition-all duration-300 text-white font-medium shadow-lg hover:shadow-purple-500/20`}
+            disabled={isLoading}
+            className={`w-full px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              isLoading
+                ? "bg-zinc-800 text-zinc-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
+            }`}
           >
             {isLoading ? (
-              <span className="flex items-center justify-center">
+              <span className="flex items-center justify-center space-x-2">
                 <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
+                  className="animate-spin h-5 w-5 text-white"
                   viewBox="0 0 24 24"
                 >
                   <circle
@@ -67,14 +64,14 @@ const RetractableChatbox = () => {
                     r="10"
                     stroke="currentColor"
                     strokeWidth="4"
-                  ></circle>
+                  />
                   <path
                     className="opacity-75"
                     fill="currentColor"
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
+                  />
                 </svg>
-                Analyzing...
+                <span>Analyzing...</span>
               </span>
             ) : (
               "Explore Chemical Reactions"
@@ -82,8 +79,8 @@ const RetractableChatbox = () => {
           </button>
         </form>
       </div>
-      <div ref={chatBoxRef} className="flex-1 p-6 overflow-y-auto">
-        <div className="h-full bg-black/30 rounded-lg p-6">
+      <div ref={chatBoxRef} className="flex-1 p-4 lg:p-6 overflow-y-auto">
+        <div className="h-full bg-black/30 rounded-lg p-4 lg:p-6">
           <pre className="whitespace-pre-wrap text-zinc-300 text-sm font-mono">
             {chatHistory.length > 0
               ? chatHistory[chatHistory.length - 1].content
